@@ -60,7 +60,7 @@ def create_populate_Bars():
     statement = '''
         CREATE TABLE 'Bars'(
             'Id' INTEGER PRIMARY KEY AUTOINCREMENT,
-            'Companry' TEXT NOT NULL,
+            'Company' TEXT NOT NULL,
             'SpecificBeanBarName' TEXT NOT NULL,
             'REF' TEXT,
             'ReviewDate' TEXT,
