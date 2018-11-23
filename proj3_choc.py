@@ -369,8 +369,10 @@ def process_command(command):
         elif len(cmd_lst) == 2:
             if cmd_lst[1].startswith("country"):
                 flag = "100"
+                sellcountry = cmd_lst[1].split("=")[1]
             elif cmd_lst[1].startswith("region"):
                 flag = "200"
+                sellregion = cmd_lst[1].split("=")[1]
             elif cmd_lst[1] == "ratings":
                 flag = "010"
             elif cmd_lst[1] == "cocoa":
@@ -379,22 +381,26 @@ def process_command(command):
                 flag = "030"
             elif cmd_lst[1].startswith("top"):
                 flag = "001"
+                limit = int(cmd_lst[1].split("=")[1])
             elif cmd_lst[1].startswith("bottom"):
                 flag = "002"
+                limit = int(cmd_lst[1].split("=")[1])
         elif len(cmd_lst) == 3:
             if cmd_lst[1].startswith("country"):
+                sellcountry = cmd_lst[1].split("=")[1]
                 if cmd_lst[2] == "ratings":
                     flag = "110"
                 elif cmd_lst[2] == "cocoa":
                     flag = "120"
-                elif cmd_lst[3] == "bars_sold":
+                elif cmd_lst[2] == "bars_sold":
                     flag = "130"
             elif cmd_lst[1].startswith("region"):
+                sellregion = cmd_lst[1].split("=")[1]
                 if cmd_lst[2] == "ratings":
                     flag = "210"
                 elif cmd_lst[2] == "cocoa":
                     flag = "220"
-                elif cmd_lst[3] == "bars_sold":
+                elif cmd_lst[2] == "bars_sold":
                     flag = "230"
             elif cmd_lst[1] == "ratings":
                 if cmd_lst[2].startswith("top"):
@@ -444,10 +450,107 @@ def process_command(command):
                         flag = "231"
                     elif cmd_lst[3].startswith("bottom"):
                         flag = "232"
-        if flag == "000":
+
+        if flag == "000" or flag == "010":
             stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
             stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
             stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT 10'
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "020":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT 10'
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "030":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT 10'
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "100" or flag == "110":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT 10'
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "120":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT 10'
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "130":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT 10'
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "200" or flag == "210":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT 10'
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "220":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT 10'
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "230":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT 10'
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "001":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "002":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) ASC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "011":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "012":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) ASC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "021":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "022":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) ASC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "031":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT {}'.format(limit)
+            cur.execute(stm)
+            lst = cur.fetchall()
+        elif flag == "032":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) ASC LIMIT {}'.format(limit)
             cur.execute(stm)
             lst = cur.fetchall()
 
@@ -486,7 +589,9 @@ if __name__=="__main__":
     #lst = process_command("bars sourceregion=Asia bottom=20")
     #lst = process_command("bars sourcecountry=BR")
 
-    lst = process_command("companies")
+    #lst = process_command("companies")
+    lst = process_command("companies region=Europe bars_sold")
+    #lst = process_command("companies bottom=6")
 
 
 
