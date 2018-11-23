@@ -110,22 +110,212 @@ create_populate_Countries()
 create_populate_Bars()
 
 
-'''
-with open(COUNTRIESJSON, encoding = 'utf-8') as countries_file:
-    countries_lst = json.load(countries_file)
-
-print(type(countries_lst))
-print(len(countries_lst))
-print(countries_lst[0])
-print("\n\n\n\n\n")
-print(countries_lst[1])
-print(type(countries_lst[0]))
-#print("\n{}".format(countries_dct))
-countries_file.close()'''
-
 
 # Part 2: Implement logic to process user commands
 def process_command(command):
+    conn = sqlite3.connect(DBNAME)
+    cur = conn.cursor()
+    cmd_lst = command.split()
+    if cmd_lst[0] == "bars":
+        if len(cmd_lst) == 1:
+            flag1 = 0
+            flag2 = 0
+            flag3 = 0
+        else:
+            if cmd_lst[1].startswith("sellcountry"):
+                sellcountry = cmd_lst[1].split("=")[1]
+                flag1 = 1
+            elif cmd_lst[1].startswith("sourcecountry"):
+                sourcecountry = cmd_lst[1].split("=")[1]
+                flag1 = 2
+            elif cmd_lst[1].startswith("sellregion"):
+                sellregion = cmd_lst[1].split("=")[1]
+                flag1 = 3
+            elif cmd_lst[1].startswith("sourceregion"):
+                sourceregion = cmd_lst[1].split("=")[1]
+                flag1 = 4
+            else:
+                flag1 = 0
+
+            if flag1 != 0:
+                if len(cmd_lst) == 2:
+                    flag2 = 0
+                    flag3 = 0
+                elif len(cmd_lst） == 3:
+                    if cmd_lst[2] == "ratings":
+                        flag2 = 1
+                        flag3 = 0
+                    elif cmd_lst[2] == "cocoa":
+                        flag2 = 2
+                        flag3 = 0
+                    elif cmd_lst[2].startswith("top"):
+                        limit = int(cmd_lst[2].split("=")[1])
+                        flag2 = 0
+                        flag3 = 1
+                    elif cmd_lst[2].startswith("bottom"):
+                        limit = int(cmd_lst[2].split("=")[1])
+                        flag2 = 0
+                        flag3 = 2
+                elif len(cmd_lst) == 4:
+                    if cmd_lst[2] == "ratings":
+                        flag2 = 1
+                    elif cmd_lst[2] == "cocoa":
+                        flag2 = 2
+                    if cmd_lst[3].startswith("top"):
+                        limit = int(cmd_lst[3].split("=")[1])
+                        flag3 = 1
+                    elif cmd_lst[3].startswith("bottom"):
+                        limit = int(cmd_lst[3].split("=")[1])
+                        flag3 = 2
+            else: #flag1 = 0
+                if len(cmd_lst) == 2:
+                    if cmd_lst[1] == "ratings":
+                        flag2 = 1
+                        flag3 = 0
+                    elif cmd_lst[1] == "cocoa":
+                        flag2 = 2
+                        flag3 = 0
+                    elif cmd_lst[1].startswith("top"):
+                        limit = int(cmd_lst[1].split("=")[1])
+                        flag2 = 0
+                        flag3 = 1
+                    elif cmd_lst[1].startswith("bottom"):
+                        limit = int(cmd_lst[1].split("=")[1])
+                        flag2 = 0
+                        flag3 = 2
+                elif len(cmd_lst) == 3:
+                    if cmd_lst[1] == "ratings":
+                        flag2 = 1
+                    elif cmd_lst[1] == "cocoa":
+                        flag2 = 2
+                    if cmd_lst[2].startswith("top"):
+                        limit = int(cmd_lst[2].split("=")[1])
+                        flag3 = 1
+                    elif cmd_lst[2].startswith("bottom"):
+                        limit = int(cmd_lst[2].split("=")[1])
+                        flag3 = 2
+
+        if flag1 == 0:
+            if flag2 == 0:
+                if flag3 == 0:
+                    stm = ''
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 1:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 2:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+        elif flag1 == 1:
+            if flag2 == 0:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 1:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 2:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+        elif flag1 == 2:
+            if flag2 == 0:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 1:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 2:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+        elif flag1 == 3:
+            if flag2 == 0:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 1:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 2:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+        elif flag1 == 4:
+            if flag2 == 0:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 1:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+            elif flag2 == 2:
+                if flag3 == 0:
+                    pass
+                elif flag3 == 1:
+                    pass
+                elif flag3 == 2:
+                    pass
+
+
+
+    elif cmd_lst[0] == "companies":
+        pass
+
+    elif cmd_lst[0] == "contries":
+        pass
+
+    elif cmd_lst[0] == "regions":
+        pass
     return []
 
 
