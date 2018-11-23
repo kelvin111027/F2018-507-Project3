@@ -105,10 +105,10 @@ def create_populate_Bars():
                 cur.execute(statement, insertion)
         conn.commit()
     conn.close()
-
+'''
 create_populate_Countries()
 create_populate_Bars()
-
+'''
 
 
 # Part 2: Implement logic to process user commands
@@ -365,7 +365,7 @@ def process_command(command):
     elif cmd_lst[0] == "companies":
         flag = -1
         if len(cmd_lst) == 1:
-            flag = "0"
+            flag = "000"
         elif len(cmd_lst) == 2:
             if cmd_lst[1].startswith("country"):
                 flag = "100"
@@ -411,9 +411,45 @@ def process_command(command):
                     flag = "031"
                 elif cmd_lst[2].startswith("bottom"):
                     flag = "032"
-
         elif len(cmd_lst) == 4:
-            pass
+            if cmd_lst[1].startswith("country"):
+                if cmd_lst[2] == "ratings":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "111"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "112"
+                elif cmd_lst[2] == "cocoa":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "121"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "122"
+                elif cmd_lst[3] == "bars_sold":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "131"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "132"
+            elif cmd_lst[2].startswith("region"):
+                if cmd_lst[2] == "ratings":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "211"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "212"
+                elif cmd_lst[2] == "cocoa":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "221"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "222"
+                elif cmd_lst[3] == "bars_sold":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "231"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "232"
+        if flag == "000":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT 10'
+            cur.execute(stm)
+            lst = cur.fetchall()
 
     elif cmd_lst[0] == "contries":
         pass
@@ -447,8 +483,10 @@ if __name__=="__main__":
     #lst = process_command("bars")
     #lst = process_command("bars sellcountry=IL cocoa")
     #lst = process_command("bars sellregion=Asia top=25")
-    lst = process_command("bars sourceregion=Asia bottom=20")
+    #lst = process_command("bars sourceregion=Asia bottom=20")
     #lst = process_command("bars sourcecountry=BR")
+
+    lst = process_command("companies")
 
 
 
