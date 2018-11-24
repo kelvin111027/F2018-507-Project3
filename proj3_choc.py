@@ -105,10 +105,10 @@ def create_populate_Bars():
                 cur.execute(statement, insertion)
         conn.commit()
     conn.close()
-
+'''
 create_populate_Countries()
 create_populate_Bars()
-
+'''
 
 
 # Part 2: Implement logic to process user commands
@@ -1281,11 +1281,24 @@ def interactive_prompt():
         if response == 'help':
             print(help_text)
             continue
+        elif response == 'exit':
+            continue
+        else:
+            try:
+                lst = process_command(response)
+                if response.startswith("bars"):
+                    for t in lst:
+                        print("{} {} {} {} {}% {}".format(t[0],t[1],t[2],t[3],t[4],t[5]))
+                else:
+                    pass
+            except:
+                print("Invalid input! Enter 'help' for instructions")
+
 
 # Make sure nothing runs or prints out when this file is run as a module
 if __name__=="__main__":
-    #interactive_prompt()
-    #lst = process_command("bars")
+    interactive_prompt()
+    #lst = process_command("bars ratings")
     #lst = process_command("bars sellcountry=IL cocoa")
     #lst = process_command("bars sellregion=Asia top=25")
     #lst = process_command("bars sourceregion=Asia bottom=20")
@@ -1305,54 +1318,53 @@ if __name__=="__main__":
 
 
     #lst = process_command("countries") #0000
-    lst = process_command("countries top=12") #0001
-    lst = process_command("countries bottom=5") #0002
-    lst = process_command("countries region=Europe") #1000
-    lst = process_command("countries sources") #0200
-    lst = process_command("countries sources ratings") #0210
-    lst = process_command("countries cocoa") #0020
-    lst = process_command("countries sellers bars_sold") #0130
-    lst = process_command("countries region=Americas sources") #1200
-    lst = process_command("countries region=Americas cocoa") #1020
-    lst = process_command("countries region=Americas bars_sold") #1030
-    lst = process_command("countries region=Americas top=5") #1001
-    lst = process_command("countries region=Americas ratings bottom=5") #1002
-    lst = process_command("countries sources cocoa") #0220
-    lst = process_command("countries sources bars_sold") #0230
-    lst = process_command("countries sources top=5") #0201
-    lst = process_command("countries sources ratings bottom=8") #0211
-    lst = process_command("countries cocoa top=6") #0021
-    lst = process_command("countries cocoa bottom=6") #0022
-    lst = process_command("countries bars_sold top=3") #0031
-    lst = process_command("countries bars_sold bottom=8") #0032
-    lst = process_command("countries region=Americas sources cocoa") #1220
-    lst = process_command("countries region=Americas sources bars_sold") #1230
-    lst = process_command("countries region=Americas sources top=12") #1201
-    lst = process_command("countries region=Americas sources bottom=7") #1202
-    lst = process_command("countries region=Americas cocoa top=9") #1021
-    lst = process_command("countries region=Americas cocoa bottom=4") #1022
-    lst = process_command("countries region=Americas bars_sold top=9") #1031
-    lst = process_command("countries region=Americas bars_sold bottom=4") #1032
-    lst = process_command("countries sources cocoa top=7") #0221
-    lst = process_command("countries sources cocoa bottom=7") #0222
-    lst = process_command("countries sources bars_sold top=11") #0231
-    lst = process_command("countries sources bars_sold bottom=6") #0232
-    lst = process_command("countries region=Americas sources cocoa top=4") #1221
-    lst = process_command("countries region=Americas sources cocoa bottom=14") #1222
-    lst = process_command("countries region=Americas sources bars_sold top=4") #1231
-    lst = process_command("countries region=Americas sources bars_sold bottom=14") #1232
+    #lst = process_command("countries top=12") #0001
+    #lst = process_command("countries bottom=5") #0002
+    #lst = process_command("countries region=Europe") #1000
+    #lst = process_command("countries sources") #0200
+    #lst = process_command("countries sources ratings") #0210
+    #lst = process_command("countries cocoa") #0020
+    #lst = process_command("countries sellers bars_sold") #0130
+    #lst = process_command("countries region=Americas sources") #1200
+    #lst = process_command("countries region=Americas cocoa") #1020
+    #lst = process_command("countries region=Americas bars_sold") #1030
+    #lst = process_command("countries region=Americas top=5") #1001
+    #lst = process_command("countries region=Americas ratings bottom=5") #1002
+    #lst = process_command("countries sources cocoa") #0220
+    #lst = process_command("countries sources bars_sold") #0230
+    #lst = process_command("countries sources top=5") #0201
+    #lst = process_command("countries sources ratings bottom=8") #0211
+    #lst = process_command("countries cocoa top=6") #0021
+    #lst = process_command("countries cocoa bottom=6") #0022
+    #lst = process_command("countries bars_sold top=3") #0031
+    #lst = process_command("countries bars_sold bottom=8") #0032
+    #lst = process_command("countries region=Americas sources cocoa") #1220
+    #lst = process_command("countries region=Americas sources bars_sold") #1230
+    #lst = process_command("countries region=Americas sources top=12") #1201
+    #lst = process_command("countries region=Americas sources bottom=7") #1202
+    #lst = process_command("countries region=Americas cocoa top=9") #1021
+    #lst = process_command("countries region=Americas cocoa bottom=4") #1022
+    #lst = process_command("countries region=Americas bars_sold top=9") #1031
+    #lst = process_command("countries region=Americas bars_sold bottom=4") #1032
+    #lst = process_command("countries sources cocoa top=7") #0221
+    #lst = process_command("countries sources cocoa bottom=7") #0222
+    #lst = process_command("countries sources bars_sold top=11") #0231
+    #lst = process_command("countries sources bars_sold bottom=6") #0232
+    #lst = process_command("countries region=Americas sources cocoa top=4") #1221
+    #lst = process_command("countries region=Americas sources cocoa bottom=14") #1222
+    #lst = process_command("countries region=Americas sources bars_sold top=4") #1231
+    #lst = process_command("countries region=Americas sources bars_sold bottom=14") #1232
 
 
 
 
-    lst = process_command("regions")
-    lst = process_command("regions sources ratings")
-    lst = process_command("regions bars_sold") #030
-    lst = process_command("regions sellers cocoa") #020
-    lst = process_command("regions sellers top=4")
-    lst = process_command("regions sources ratings bottom=4")
-    lst = process_command("regions bars_sold top=8")
-
-
+    #lst = process_command("regions")
+    #lst = process_command("regions sources ratings")
+    #lst = process_command("regions bars_sold") #030
+    #lst = process_command("regions sellers cocoa") #020
+    #lst = process_command("regions sellers top=4")
+    #lst = process_command("regions sources ratings bottom=4")
+    #lst = process_command("regions bars_sold top=8")
+    '''
     for i in lst:
-        print(i)
+        print(i) '''
