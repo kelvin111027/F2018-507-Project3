@@ -633,7 +633,208 @@ def process_command(command):
             lst = cur.fetchall()
 
     elif cmd_lst[0] == "contries":
-        pass
+        flag = -1
+        if len(cmd_lst) == 1:
+            flag = "0000"
+        elif len(cmd_lst) == 2:
+            if cmd_lst[1].startswith("region"):
+                flag = "1000"
+                region = cmd_lst[1].split("=")[1]
+            elif cmd_lst[1] == "sellers":
+                flag = "0100"
+            elif cmd_lst[1] == "sources":
+                flag = "0200"
+            elif cmd_lst[1] == "ratings":
+                flag = "0010"
+            elif cmd_lst[1] == "cocoa":
+                flag = "0020"
+            elif cmd_lst[1] == "bars_sold":
+                flag = "0030"
+            else:
+                limit = int(cmd_lst[1].split("=")[1])
+                if cmd_lst[1].startswith("top"):
+                    flag = "0001"
+                elif cmd_lst[1].startswith("bottom"):
+                    flag = "0002"
+        elif len(cmd_lst) == 3:
+            if cmd_lst[1].startswith("region"):
+                region = cmd_lst[1].split("=")[1]
+                if cmd_lst[2] == "sellers":
+                    flag = "1100"
+                elif cmd_lst[2] == "sources":
+                    flag = "1200"
+                elif cmd_lst[2] == "ratings":
+                    flag = "1010"
+                elif cmd_lst[2] == "cocoa":
+                    flag = "1020"
+                elif cmd_lst[2] == "bars_sold":
+                    flag = "1030"
+                else:
+                    limit = int(cmd_lst[2].split("=")[1])
+                    if cmd_lst[2].startswith("top"):
+                        flag = "1001"
+                    elif cmd_lst[2].startswith("bottom"):
+                        flag = "1002"
+            elif cmd_lst[1] == "sellers":
+                if cmd_lst[2] == "ratings":
+                    flag = "0110"
+                elif cmd_lst[2] == "cocoa":
+                    flag = "0120"
+                elif cmd_lst[2] == "bars_sold":
+                    flag = "0130"
+                else:
+                    limit = int(cmd_lst[2].split("=")[1])
+                    if cmd_lst[2].startswith("top"):
+                        flag = "0101"
+                    elif cmd_lst[2].startswith("bottom"):
+                        flag = "0102"
+            elif cmd_lst[1] == "sources":
+                if cmd_lst[2] == "ratings":
+                    flag = "0210"
+                elif cmd_lst[2] == "cocoa":
+                    flag = "0220"
+                elif cmd_lst[2] == "bars_sold":
+                    flag = "0230"
+                else:
+                    limit = int(cmd_lst[2].split("=")[1])
+                    if cmd_lst[2].startswith("top"):
+                        flag = "0201"
+                    elif cmd_lst[2].startswith("bottom"):
+                        flag = "0202"
+            elif cmd_lst[1] == "ratings":
+                limit = int(cmd_lst[2].split("=")[1])
+                if cmd_lst[2].startswith("top"):
+                    flag = "0011"
+                elif cmd_lst[2].startswith("bottom"):
+                    flag = "0012"
+            elif cmd_lst[1] == "cocoa":
+                limit = int(cmd_lst[2].split("=")[1])
+                if cmd_lst[2].startswith("top"):
+                    flag = "0021"
+                elif cmd_lst[2].startswith("bottom"):
+                    flag = "0022"
+            elif cmd_lst[1] == "bars_sold":
+                limit = int(cmd_lst[2].split("=")[1])
+                if cmd_lst[2].startswith("top"):
+                    flag = "0031"
+                elif cmd_lst[2].startswith("bottom"):
+                    flag = "0032"
+        elif len(cmd_lst) == 4:
+            if cmd_lst[1].startswith("region"):
+                region = cmd_lst[1].split("=")[1]
+                if cmd_lst[2]  == "sellers":
+                    if cmd_lst[3] == "ratings":
+                        flag = "1110"
+                    elif cmd_lst[3] == "cocoa":
+                        flag = "1120"
+                    elif cmd_lst[3] == "bars_sold":
+                        flag = "1130"
+                    else:
+                        limit = int(cmd_lst[3].split("=")[1])
+                        if cmd_lst[3].startswith("top"):
+                            flag = "1101"
+                        elif cmd_lst[3].startswith("bottom"):
+                            flag = "1102"
+                elif cmd_lst[2] == "sources":
+                    if cmd_lst[3] == "ratings":
+                        flag = "1210"
+                    elif cmd_lst[3] == "cocoa":
+                        flag = "1220"
+                    elif cmd_lst[3] == "bars_sold":
+                        flag = "1230"
+                    else:
+                        limit = int(cmd_lst[3].split("=")[1])
+                        if cmd_lst[3].startswith("top"):
+                            flag = "1201"
+                        elif cmd_lst[3].startswith("bottom"):
+                            flag = "1202"
+                elif cmd_lst[2] == "ratings":
+                    limit = int(cmd_lst[3].split("=")[1])
+                    if cmd_lst[3].startswith("top"):
+                        flag = "1011"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "1012"
+                elif cmd_lst[2] == "cocoa":
+                    limit = int(cmd_lst[3].split("=")[1])
+                    if cmd_lst[3].startswith("top"):
+                        flag = "1021"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "1022"
+                elif cmd_lst[2] == "bars_sold":
+                    limit = int(cmd_lst[3].split("=")[1])
+                    if cmd_lst[3].startswith("top"):
+                        flag = "1031"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "1032"
+            elif cmd_lst[1] == "sellers":
+                limit = int(cmd_lst[3].split("=")[1])
+                if cmd_lst[2] == "ratings":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "0111"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "0112"
+                elif cmd_lst[2] == "cocoa":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "0121"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "0122"
+                elif cmd_lst[2] == "bars_sold":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "0131"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "0132"
+            elif cmd_lst[1] == "sources":
+                limit = int(cmd_lst[3].split("=")[1])
+                if cmd_lst[2] == "ratings":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "0211"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "0212"
+                elif cmd_lst[2] == "cocoa":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "0221"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "0222"
+                elif cmd_lst[2] == "bars_sold":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "0231"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "0232"
+        elif len(cmd_lst) == 5:
+            region = cmd_lst[1].split("=")[1]
+            limit = int(cmd_lst[4].split("=")[1])
+            if cmd_lst[2] == "sellers":
+                if cmd_lst[3] == "ratings":
+                    if cmd_lst[4].startswith("top"):
+                        flag = "1111"
+                    elif cmd_lst[4].startswith("bottom"):
+                        flag = "1112"
+                elif cmd_lst[3] == "cocoa":
+                    if cmd_lst[4].startswith("top"):
+                        flag = "1121"
+                    elif cmd_lst[4].startswith("bottom"):
+                        flag = "1122"
+                elif cmd_lst[3] == "bars_sold":
+                    if cmd_lst[4].startswith("top"):
+                        flag = "1131"
+                    elif cmd_lst[4].startswith("bottom"):
+                        flag = "1132"
+            elif cmd_lst[2] == "sources":
+                if cmd_lst[3] == "ratings":
+                    if cmd_lst[4].startswith("top"):
+                        flag = "1211"
+                    elif cmd_lst[4].startswith("bottom"):
+                        flag = "1212"
+                elif cmd_lst[3] == "cocoa":
+                    if cmd_lst[4].startswith("top"):
+                        flag = "1221"
+                    elif cmd_lst[4].startswith("bottom"):
+                        flag = "1222"
+                elif cmd_lst[3] == "bars_sold":
+                    if cmd_lst[4].startswith("top"):
+                        flag = "1231"
+                    elif cmd_lst[4].startswith("bottom"):
+                        flag = "1232"
 
     elif cmd_lst[0] == "regions":
         pass
