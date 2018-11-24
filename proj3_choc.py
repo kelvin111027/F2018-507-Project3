@@ -1289,11 +1289,24 @@ def interactive_prompt():
                 if response.startswith("bars"):
                     for t in lst:
                         print("{} {} {} {} {}% {}".format(t[0],t[1],t[2],t[3],t[4],t[5]))
+                        shorted_lst = []
+                        for i in t:
+                            try: #if i is a string obj
+                                i = (i[:12] + '...') if len(i) > 12 else i
+                                shorted_lst.append(i)
+                            except: #if i is not a string obj
+                                shorted_lst.append(i)
+
                 else:
                     pass
             except:
                 print("Invalid input! Enter 'help' for instructions")
 
+
+print('{:10.5}'.format("addddf") + '{:10.5}'.format("dfaiixi"))
+data = "diijixfrdgioillkknniiix"
+info = (data[:12] + '...') if len(data) > 15 else data
+print(info)
 
 # Make sure nothing runs or prints out when this file is run as a module
 if __name__=="__main__":
