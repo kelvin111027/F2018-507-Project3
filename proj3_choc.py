@@ -407,18 +407,23 @@ def process_command(command):
                     flag = "011"
                 elif cmd_lst[2].startswith("bottom"):
                     flag = "012"
-            elif cmd_lst[1] == "coco":
+                limit = int(cmd_lst[2].split("=")[1])
+            elif cmd_lst[1] == "cocoa":
                 if cmd_lst[2].startswith("top"):
                     flag = "021"
                 elif cmd_lst[2].startswith("bottom"):
                     flag = "022"
+                limit = int(cmd_lst[2].split("=")[1])
             elif cmd_lst[1] == "bars_sold":
                 if cmd_lst[2].startswith("top"):
                     flag = "031"
                 elif cmd_lst[2].startswith("bottom"):
                     flag = "032"
+                limit = int(cmd_lst[2].split("=")[1])
         elif len(cmd_lst) == 4:
+            limit = int(cmd_lst[3].split("=")[1])
             if cmd_lst[1].startswith("country"):
+                sellcountry = cmd_lst[1].split("=")[1]
                 if cmd_lst[2] == "ratings":
                     if cmd_lst[3].startswith("top"):
                         flag = "111"
@@ -429,12 +434,13 @@ def process_command(command):
                         flag = "121"
                     elif cmd_lst[3].startswith("bottom"):
                         flag = "122"
-                elif cmd_lst[3] == "bars_sold":
+                elif cmd_lst[2] == "bars_sold":
                     if cmd_lst[3].startswith("top"):
                         flag = "131"
                     elif cmd_lst[3].startswith("bottom"):
                         flag = "132"
-            elif cmd_lst[2].startswith("region"):
+            elif cmd_lst[1].startswith("region"):
+                sellregion = cmd_lst[1].split("=")[1]
                 if cmd_lst[2] == "ratings":
                     if cmd_lst[3].startswith("top"):
                         flag = "211"
@@ -445,7 +451,7 @@ def process_command(command):
                         flag = "221"
                     elif cmd_lst[3].startswith("bottom"):
                         flag = "222"
-                elif cmd_lst[3] == "bars_sold":
+                elif cmd_lst[2] == "bars_sold":
                     if cmd_lst[3].startswith("top"):
                         flag = "231"
                     elif cmd_lst[3].startswith("bottom"):
@@ -553,6 +559,78 @@ def process_command(command):
             stm += 'GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) ASC LIMIT {}'.format(limit)
             cur.execute(stm)
             lst = cur.fetchall()
+        elif flag == "111":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "112":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "121":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "122":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "131":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "132":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Alpha2 = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellcountry,))
+            lst = cur.fetchall()
+        elif flag == "211":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "212":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.Rating),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.Rating) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "221":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "222":
+            stm = 'SELECT b.Company, c.EnglishName, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "231":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
+        elif flag == "232":
+            stm = 'SELECT b.Company, c.EnglishName, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'WHERE c.Region = ? GROUP BY b.Company HAVING count(*) > 4 ORDER BY count(*) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (sellregion,))
+            lst = cur.fetchall()
 
     elif cmd_lst[0] == "contries":
         pass
@@ -590,10 +668,16 @@ if __name__=="__main__":
     #lst = process_command("bars sourcecountry=BR")
 
     #lst = process_command("companies")
-    lst = process_command("companies region=Europe bars_sold")
+    #lst = process_command("companies region=Europe bars_sold")
     #lst = process_command("companies bottom=6")
+    #lst = process_command("companies country=US ratings bottom=15") #122
+    #lst = process_command("companies bars_sold top=55")
 
 
+    #lst = process_command("companies country=US bars_sold top=20") #131
+    #lst = process_command("companies country=US bars_sold bottom=20") #132
+    #lst = process_command("companies region=Europe bars_sold top=20") #231
+    lst = process_command("companies region=Europe cocoa bottom=20") #222
 
     for i in lst:
         print(i)
