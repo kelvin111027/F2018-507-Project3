@@ -105,10 +105,10 @@ def create_populate_Bars():
                 cur.execute(statement, insertion)
         conn.commit()
     conn.close()
-
+'''
 create_populate_Countries()
 create_populate_Bars()
-
+'''
 
 
 # Part 2: Implement logic to process user commands
@@ -1053,10 +1053,89 @@ def process_command(command):
             lst = cur.fetchall()
 
 
-
-
     elif cmd_lst[0] == "regions":
-        pass
+        flag = ""
+        if len(cmd_lst) == 1:
+            flag == "000"
+        elif len(cmd_lst) == 2:
+            if cmd_lst[1] == "sellers":
+                flag = "100"
+            elif cmd_lst[1] == "sources":
+                flag = "200"
+        elif len(cmd_lst) == 3:
+            if cmd_lst[1] == "sellers":
+                if cmd_lst[2] == "ratings":
+                    flag = "110"
+                elif cmd_lst[2] == "cocoa":
+                    flag = "120"
+                elif cmd_lst[2] == "bars_sold":
+                    flag = "130"
+            elif cmd_lst[1] == "sources":
+                if cmd_lst[2] == "ratings":
+                    flag = "210"
+                elif cmd_lst[2] == "cocoa":
+                    flag = "220"
+                elif cmd_lst[2] == "bars_sold":
+                    flag = "230"
+            else:
+                limit = int(cmd_lst[2].split("=")[1])
+                if cmd_lst[1] == "ratings":
+                    if cmd_lst[2].startswith("top"):
+                        flag = "011"
+                    elif cmd_lst[2].startswith("bottom"):
+                        flag = "012"
+                elif cmd_lst[1] == "cocoa":
+                    if cmd_lst[2].startswith("top"):
+                        flag = "021"
+                    elif cmd_lst[2].startswith("bottom"):
+                        flag = "022"
+                elif cmd_lst[1] == "bars_sold":
+                    if cmd_lst[2].startswith("top"):
+                        flag = "031"
+                    elif cmd_lst[2].startswith("bottom"):
+                        flag = "032"
+        elif len(cmd_lst) == 4:
+            limit = int(cmd_lst[3].split("=")[1])
+            if cmd_lst[1] == "sellers":
+                if cmd_lst[2] == "ratings":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "111"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "112"
+                elif cmd_lst[2] == "cocoa":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "121"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "122"
+                elif cmd_lst[2] == "bars_sold":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "131"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "132"
+            elif cmd_lst[1] == "sources":
+                if cmd_lst[2] == "ratings":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "211"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "212"
+                elif cmd_lst[2] == "cocoa":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "221"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "222"
+                elif cmd_lst[2] == "bars_sold":
+                    if cmd_lst[3].startswith("top"):
+                        flag = "231"
+                    elif cmd_lst[3].startswith("bottom"):
+                        flag = "232"
+
+        if flag == "000" or flag == "100" or flag == "010" or flag == "110":
+            stm = 'SELECT c.Region, round(AVG(b.Rating),1) FROM Bars AS b '
+            stm += 'JOIN Countries AS c ON b.CompanyLocationId = c.Id '
+            stm += 'GROUP BY c.Region HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT 10'
+            cur.execute(stm)
+            lst = cur.fetchall()
+
 
     conn.close()
     return lst
@@ -1101,6 +1180,7 @@ if __name__=="__main__":
 
 
     #lst = process_command("countries") #0000
+    '''
     lst = process_command("countries top=12") #0001
     lst = process_command("countries bottom=5") #0002
     lst = process_command("countries region=Europe") #1000
@@ -1137,122 +1217,14 @@ if __name__=="__main__":
     lst = process_command("countries region=Americas sources cocoa bottom=14") #1222
     lst = process_command("countries region=Americas sources bars_sold top=4") #1231
     lst = process_command("countries region=Americas sources bars_sold bottom=14") #1232
+    '''
+
+
+
+    lst = process_command("regions")
+
+
+
 
     for i in lst:
         print(i)
-
-
-
-
-'''
-        if flag1 == 0:
-            if flag2 == 0:
-                if flag3 == 0:
-                    stm = ''
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 1:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 2:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-        elif flag1 == 1:
-            if flag2 == 0:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 1:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 2:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-        elif flag1 == 2:
-            if flag2 == 0:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 1:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 2:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-        elif flag1 == 3:
-            if flag2 == 0:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 1:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 2:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-        elif flag1 == 4:
-            if flag2 == 0:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 1:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-            elif flag2 == 2:
-                if flag3 == 0:
-                    pass
-                elif flag3 == 1:
-                    pass
-                elif flag3 == 2:
-                    pass
-                    '''
