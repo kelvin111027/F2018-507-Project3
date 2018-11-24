@@ -105,10 +105,10 @@ def create_populate_Bars():
                 cur.execute(statement, insertion)
         conn.commit()
     conn.close()
-'''
+
 create_populate_Countries()
 create_populate_Bars()
-'''
+
 
 
 # Part 2: Implement logic to process user commands
@@ -967,13 +967,13 @@ def process_command(command):
             stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT 10'
             cur.execute(stm, (region,))
             lst = cur.fetchall()
-        elif flag == "1201":
+        elif flag == "1201" or flag == "1211":
             stm = 'SELECT o.EnglishName, o.Region, round(AVG(b.Rating),1) '
             stm += 'FROM Bars AS b JOIN Countries AS o on b.BroadBeanOriginId = o.Id '
             stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY AVG(b.Rating) DESC LIMIT {}'.format(limit)
             cur.execute(stm, (region,))
             lst = cur.fetchall()
-        elif flag == "1202":
+        elif flag == "1202" or flag == "1212":
             stm = 'SELECT o.EnglishName, o.Region, round(AVG(b.Rating),1) '
             stm += 'FROM Bars AS b JOIN Countries AS o on b.BroadBeanOriginId = o.Id '
             stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY AVG(b.Rating) ASC LIMIT {}'.format(limit)
@@ -1027,8 +1027,30 @@ def process_command(command):
             stm += 'GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY count(*) ASC LIMIT {}'.format(limit)
             cur.execute(stm)
             lst = cur.fetchall()
-
-
+        elif flag == "1221":
+            stm = 'SELECT o.EnglishName, o.Region, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS o on b.BroadBeanOriginId = o.Id '
+            stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (region,))
+            lst = cur.fetchall()
+        elif flag == "1222":
+            stm = 'SELECT o.EnglishName, o.Region, round(AVG(b.CocoaPercent),1) '
+            stm += 'FROM Bars AS b JOIN Countries AS o on b.BroadBeanOriginId = o.Id '
+            stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY AVG(b.CocoaPercent) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (region,))
+            lst = cur.fetchall()
+        elif flag == "1231":
+            stm = 'SELECT o.EnglishName, o.Region, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS o on b.BroadBeanOriginId = o.Id '
+            stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY count(*) DESC LIMIT {}'.format(limit)
+            cur.execute(stm, (region,))
+            lst = cur.fetchall()
+        elif flag == "1232":
+            stm = 'SELECT o.EnglishName, o.Region, count(*) '
+            stm += 'FROM Bars AS b JOIN Countries AS o on b.BroadBeanOriginId = o.Id '
+            stm += 'WHERE o.Region = ? GROUP BY o.EnglishName HAVING count(*) > 4 ORDER BY count(*) ASC LIMIT {}'.format(limit)
+            cur.execute(stm, (region,))
+            lst = cur.fetchall()
 
 
 
@@ -1111,9 +1133,10 @@ if __name__=="__main__":
     lst = process_command("countries sources cocoa bottom=7") #0222
     lst = process_command("countries sources bars_sold top=11") #0231
     lst = process_command("countries sources bars_sold bottom=6") #0232
-
-
-
+    lst = process_command("countries region=Americas sources cocoa top=4") #1221
+    lst = process_command("countries region=Americas sources cocoa bottom=14") #1222
+    lst = process_command("countries region=Americas sources bars_sold top=4") #1231
+    lst = process_command("countries region=Americas sources bars_sold bottom=14") #1232
 
     for i in lst:
         print(i)
